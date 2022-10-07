@@ -1,0 +1,204 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    "Find a single user by an identifying attribute."
+    user(
+        "Search by primary key."
+        id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+
+        "Search by email address."
+        email: String
+            @eq
+            @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    ): User @find
+
+    "List multiple users."
+    users(
+        "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+        name: String @where(operator: "like")
+    ): [User!]! @paginate(defaultCount: 10)
+
+    ads(user_id: ID @eq, domain_id: ID @eq, limit: Int @limit): [Ads!]!
+        @all
+        @orderBy(column: "created_at", direction: DESC)
+        @guard
+
+    allAdsResolver: [DateRange!]!
+        @field(resolver: "App\\GraphQL\\Queries\\allAdsResolver")
+
+    domain(user_id: ID @eq): [Domain!]! @paginate(defaultCount: 10)
+
+    dateRangeResolver(
+        user_id: ID
+        domain_id: ID
+        startDate: Date!
+        endDate: Date!
+    ): [DateRange!]!
+        @field(resolver: "App\\GraphQL\\Queries\\DateRangeResolver")
+}
+
+type Mutation {
+    createAds(
+        user_id: Int!
+        domain_id: Int!
+        imperssions: Int!
+        clicks: Int!
+        revenue: Int!
+        eCPM: Int!
+    ): Ads @create @guard @can(ability: "create", model: "App\\Models\\Ads")
+    updateAds(
+        id: Int!
+        user_id: Int!
+        domain_id: Int!
+        imperssions: Int!
+        clicks: Int!
+        revenue: Int!
+        eCPM: Int!
+    ): Ads @update @guard @can(ability: "update", model: "App\\Models\\Ads")
+    createUser(
+        name: String!
+        email: String!
+        password: String! @hash
+        isAdmin: Int!
+    ): User @create
+    # @guard @can(ability: "create", model: "App\\Models\\User")
+    updateUser(
+        id: Int!
+        name: String
+        email: String
+        password: String @hash
+        isAdmin: Int!
+    ): User @update @guard @can(ability: "update", model: "App\\Models\\User")
+    loginUser(
+        email: String!
+        password: String!
+        device_name: String!
+    ): AccessToken!
+        @field(resolver: "App\\GraphQL\\Mutations\\LoginUserResolver")
+    changeUserPassword(
+        user_id: Int!
+        old_password: String!
+        new_password: String!
+    ): UpdatePasswordResponse!
+        @field(resolver: "App\\GraphQL\\Mutations\\ChangeUserPassword")
+}
+
+type UpdatePasswordResponse {
+    status: UpdatePasswordStatus!
+}
+
+enum UpdatePasswordStatus {
+    """
+    PASSWORD_UPDATED
+    """
+    PASSWORD_UPDATED
+}
+
+type DateRange {
+    imperssions: String
+    clicks: String
+    revenue: String
+    eCPM: String
+}
+
+type AccessToken {
+    token: String!
+    id: Int!
+    name: String!
+    email: String!
+    isAdmin: Int!
+}
+
+"Account of a person who utilizes this application."
+type User {
+    "Unique primary key."
+    id: ID!
+
+    "Non-unique name."
+    name: String!
+
+    "is admin?"
+    isAdmin: Int!
+
+    "Unique email address."
+    email: String!
+
+    "User Domains"
+    domains: [Domain!] @hasMany
+
+    "User Ads"
+    ads: [Ads!]! @hasMany
+
+    "When the email was verified."
+    email_verified_at: DateTime
+
+    "When the account was created."
+    created_at: DateTime!
+
+    "When the account was last updated."
+    updated_at: DateTime!
+}
+
+type Ads {
+    id: Int!
+
+    user_id: Int!
+
+    domain_id: Int!
+
+    imperssions: Int!
+
+    eCPM: Int!
+
+    clicks: Int!
+
+    revenue: Int!
+
+    domain: Domain @belongsTo
+
+    user: User @belongsTo
+
+    created_at: DateTime!
+
+    updated_at: DateTime!
+}
+
+type Domain {
+    id: Int!
+
+    user_id: Int!
+
+    domain: String!
+
+    ads: [Ads] @hasMany
+
+    user: User @belongsTo
+
+    created_at: DateTime!
+
+    updated_at: DateTime!
+}
+
+type ContactForms {
+    id: Int!
+
+    full_name: String!
+
+    email: String!
+
+    site_url: String!
+
+    page_views: Int!
+
+    note: String!
+
+    created_at: DateTime!
+
+    updated_at: DateTime!
+}

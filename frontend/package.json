@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "3.0.0-rc.08"
+  },
+  "dependencies": {
+    "@meforma/vue-toaster": "^1.3.0",
+    "awesome-notifications": "^3.1.3",
+    "datatables.net-select": "^1.4.0",
+    "datatables.net-vue3": "^1.0.0",
+    "jquery": "^3.6.1",
+    "moment": "^2.29.4",
+    "simple-datatables": "^3.2.2",
+    "stylus": "^0.59.0",
+    "stylus-loader": "^3.0.2"
+  }
+}
