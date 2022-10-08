@@ -21,13 +21,15 @@ type Query {
     "List multiple users."
     users(
         "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
-        name: String @where(operator: "like")
-    ): [User!]! @paginate(defaultCount: 10)
+        email: String @where(operator: "like")
+    ): [User!]! @all
 
-    ads(user_id: ID @eq, domain_id: ID @eq, limit: Int @limit): [Ads!]!
-        @all
-        @orderBy(column: "created_at", direction: DESC)
-        @guard
+    ads(
+        id: ID @eq
+        user_id: ID @eq
+        domain_id: ID @eq
+        limit: Int @limit
+    ): [Ads!]! @all @orderBy(column: "created_at", direction: DESC) @guard
 
     allAdsResolver: [DateRange!]!
         @field(resolver: "App\\GraphQL\\Queries\\allAdsResolver")
@@ -41,6 +43,9 @@ type Query {
         endDate: Date!
     ): [DateRange!]!
         @field(resolver: "App\\GraphQL\\Queries\\DateRangeResolver")
+
+    userTokens(email: String @eq): [userToken!]!
+        @field(resolver: "App\\GraphQL\\Queries\\UserTokenResolver")
 }
 
 type Mutation {
@@ -87,6 +92,16 @@ type Mutation {
         new_password: String!
     ): UpdatePasswordResponse!
         @field(resolver: "App\\GraphQL\\Mutations\\ChangeUserPassword")
+
+    revokeUserTokens(email: String!): revokeUserTokens!
+        @field(resolver: "App\\GraphQL\\Mutations\\RevokeUserTokensResolver")
+}
+
+type userToken {
+    id: Int
+    token: String
+    name: String
+    last_used_at: DateTime
 }
 
 type UpdatePasswordResponse {
@@ -105,6 +120,10 @@ type DateRange {
     clicks: String
     revenue: String
     eCPM: String
+}
+
+type revokeUserTokens {
+    status: String!
 }
 
 type AccessToken {

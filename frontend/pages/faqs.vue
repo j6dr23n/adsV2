@@ -107,7 +107,7 @@
           <!--end card-->
         </div>
         <!--end col-->
-        <div class="col-span-12 md:col-span-12 lg:col-span-3 xl:col-span-3">
+        <div class="sm:col-span-12 md:col-span-12 lg:col-span-3 xl:col-span-3">
           <div class="card">
             <div
               class="
@@ -289,9 +289,9 @@
           <!--end card-->
         </div>
       </div>
+      <Footer />
       <!--end inner-grid-->
     </div>
-    <Footer />
   </div>
 </template>
 <script setup>

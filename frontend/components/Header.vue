@@ -113,65 +113,126 @@
               >
             </button>
           </li>
-          <li class="dropdown" v-if="isAdmin">
-            <button
-              id="navUserLink"
-              data-dropdown-toggle="navUser"
-              class="
-                dropdown-toggle
-                flex
-                w-full
-                items-center
-                border-b border-gray-800
-                py-2
-                px-3
-                font-medium
-                md:border-0 md:p-0
-              "
-            >
-              <i class="ti ti-shield-lock mr-1 pb-1 text-lg"></i> User
-              <i class="ti ti-chevron-down ml-auto lg:ml-1"></i>
-            </button>
-            <!-- Dropdown menu -->
-            <div
-              id="navUser"
-              class="
-                dropdown-menu
-                z-10
-                my-1
-                hidden
-                w-full
-                list-none
-                divide-y divide-gray-100
-                rounded
-                bg-gray-800
-                md:bg-white
-                text-base
-                shadow
-                dark:divide-gray-600
-                border border-slate-700
-                md:border-white
-                dark:border-slate-700/50 dark:bg-gray-900
-                md:w-44
-                dropdown-menu
-              "
-            >
-              <ul class="py-1">
-                <li>
-                  <a href="/user" class="nav-link dark:hover:bg-slate-800/70"
-                    >View</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="/user/create"
-                    class="nav-link dark:hover:bg-slate-800/70"
-                    >Create</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </li>
+          <ClientOnly>
+            <li class="dropdown" v-if="isAdmin">
+              <button
+                id="navUserLink"
+                data-dropdown-toggle="navUser"
+                class="
+                  dropdown-toggle
+                  flex
+                  w-full
+                  items-center
+                  border-b border-gray-800
+                  py-2
+                  px-3
+                  font-medium
+                  md:border-0 md:p-0
+                "
+              >
+                <i class="ti ti-user mr-1 pb-1 text-lg"></i> User
+                <i class="ti ti-chevron-down ml-auto lg:ml-1"></i>
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                id="navUser"
+                class="
+                  dropdown-menu
+                  z-10
+                  my-1
+                  hidden
+                  w-full
+                  list-none
+                  divide-y divide-gray-100
+                  rounded
+                  bg-gray-800
+                  md:bg-white
+                  text-base
+                  shadow
+                  dark:divide-gray-600
+                  border border-slate-700
+                  md:border-white
+                  dark:border-slate-700/50 dark:bg-gray-900
+                  md:w-44
+                  dropdown-menu
+                "
+              >
+                <ul class="py-1">
+                  <li>
+                    <a href="/user" class="nav-link dark:hover:bg-slate-800/70"
+                      >View</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="/user/create"
+                      class="nav-link dark:hover:bg-slate-800/70"
+                      >Create</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="dropdown" v-if="isAdmin">
+              <button
+                id="navAdsLink"
+                data-dropdown-toggle="navAds"
+                class="
+                  dropdown-toggle
+                  flex
+                  w-full
+                  items-center
+                  border-b border-gray-800
+                  py-2
+                  px-3
+                  font-medium
+                  md:border-0 md:p-0
+                "
+              >
+                <i class="ti ti-fold mr-1 pb-1 text-lg"></i> Ads
+                <i class="ti ti-chevron-down ml-auto lg:ml-1"></i>
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                id="navAds"
+                class="
+                  dropdown-menu
+                  z-10
+                  my-1
+                  hidden
+                  w-full
+                  list-none
+                  divide-y divide-gray-100
+                  rounded
+                  bg-gray-800
+                  md:bg-white
+                  text-base
+                  shadow
+                  dark:divide-gray-600
+                  border border-slate-700
+                  md:border-white
+                  dark:border-slate-700/50 dark:bg-gray-900
+                  md:w-44
+                  dropdown-menu
+                "
+              >
+                <ul class="py-1">
+                  <li>
+                    <a href="/ads" class="nav-link dark:hover:bg-slate-800/70"
+                      >View</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="/ads/create"
+                      class="nav-link dark:hover:bg-slate-800/70"
+                      >Create</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ClientOnly>
         </ul>
       </div>
       <div class="order-1 ml-auto flex items-center md:order-2">
@@ -201,9 +262,9 @@
               <span class="block font-medium text-gray-400">{{
                 getUser()?.name
               }}</span>
-              <span class="-mt-1 block text-sm font-medium text-gray-500"
-                >{{ isAdmin === true ? 'Admin' : 'Member' }}</span
-              >
+              <span class="-mt-1 block text-sm font-medium text-gray-500">{{
+                isAdmin === true ? "Admin" : "Member"
+              }}</span>
             </span>
           </button>
 
@@ -229,7 +290,7 @@
             <div class="py-3 px-4">
               <span
                 class="block text-sm font-medium text-gray-900 dark:text-white"
-                >{{ isAdmin === true ? 'Admin' : 'Member' }}</span
+                >{{ isAdmin === true ? "Admin" : "Member" }}</span
               >
               <span
                 class="

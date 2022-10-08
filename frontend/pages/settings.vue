@@ -36,7 +36,6 @@
                             md:col-span-12
                             lg:col-span-3
                             self-center
-                            text-right
                             mr-2
                           "
                         >
@@ -49,7 +48,7 @@
                           <input
                             type="text"
                             id="First_Name"
-                            class="form-control"
+                            class="form-control cursor-not-allowed"
                             :value="user?.name"
                             placeholder="name"
                             required
@@ -64,7 +63,6 @@
                             md:col-span-12
                             lg:col-span-3
                             self-center
-                            text-right
                             mr-2
                           "
                         >
@@ -79,7 +77,7 @@
                           <input
                             type="email"
                             id="Your_Email"
-                            class="form-control"
+                            class="form-control cursor-not-allowed"
                             :value="user.email"
                             placeholder="Last name"
                             required
@@ -114,7 +112,6 @@
                             md:col-span-12
                             lg:col-span-3
                             self-center
-                            text-right
                             mr-2
                           "
                         >
@@ -142,7 +139,6 @@
                             md:col-span-12
                             lg:col-span-3
                             self-center
-                            text-right
                             mr-2
                           "
                         >
@@ -195,6 +191,113 @@
                 <!--end card-->
               </div>
               <!--end col-->
+              <div
+                class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12"
+              >
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="card-title">Your Tokens</h4>
+                  </div>
+                  <!--end card-header-->
+                  <div class="card-body">
+                    <form>
+                      <label for="email-adress-icon" class="label"
+                        >Your Email</label
+                      >
+                      <div class="relative" bis_skin_checked="1">
+                        <div
+                          class="
+                            flex
+                            absolute
+                            inset-y-0
+                            left-0
+                            items-center
+                            pl-3
+                            pointer-events-none
+                          "
+                          bis_skin_checked="1"
+                        >
+                          <i class="ti ti-mail z-[1] dark:text-slate-500"></i>
+                        </div>
+                        <input
+                          type="text"
+                          v-model="user.email"
+                          id="email-adress-icon"
+                          class="form-control pl-10 p-2.5 cursor-not-allowed"
+                          placeholder="name@t-wind.com"
+                          disabled
+                        />
+                      </div>
+                    </form>
+                    <form class="mt-4">
+                      <label for="email-adress-icon" class="label"
+                        >Your Tokens</label
+                      >
+                      <div
+                        class="relative mt-2"
+                        bis_skin_checked="1"
+                        v-for="(item, index) in tokens"
+                        :key="index"
+                      >
+                        <div
+                          class="
+                            flex
+                            absolute
+                            inset-y-0
+                            left-0
+                            items-center
+                            pl-3
+                            pointer-events-none
+                          "
+                          bis_skin_checked="1"
+                        >
+                          <i class="ti ti-key z-[1] dark:text-slate-500"></i>
+                        </div>
+                        <input
+                          type="text"
+                          v-if="showPassword"
+                          v-model="item.token"
+                          id="email-adress-icon"
+                          class="form-control pl-10 p-2.5 cursor-not-allowed"
+                          placeholder="name@t-wind.com"
+                          disabled
+                        />
+                        <input
+                          v-else
+                          type="password"
+                          v-model="item.token"
+                          id="email-adress-icon"
+                          class="form-control pl-10 p-2.5 cursor-not-allowed"
+                          placeholder="name@t-wind.com"
+                          disabled
+                        />
+                        <div
+                          class="
+                            flex
+                            absolute
+                            inset-y-0
+                            right-0
+                            items-center
+                            pr-4
+                          "
+                          @click="toggleShow"
+                          bis_skin_checked="1"
+                        >
+                          <i class="ti ti-eye z-[1] dark:text-slate-500"></i>
+                        </div>
+                      </div>
+                      <button
+                        @click.prevent="revokeUserTokens"
+                        class="btn bg-red-500 mt-2 text-white"
+                      >
+                        Delete All Tokens
+                      </button>
+                    </form>
+                  </div>
+                  <!--end card-body-->
+                </div>
+                <!--end card-->
+              </div>
             </div>
             <!--end grid-->
           </div>
@@ -210,12 +313,18 @@
 definePageMeta({
   middleware: "auth",
 });
-const { getUser } = useAuth();
+const { getUser, removeUser } = useAuth();
 const input = ref({
   old_password: "",
   new_password: "",
 });
 const user = ref({});
+const tokens = ref({});
+const showPassword = ref(false);
+
+function toggleShow() {
+  showPassword.value = !showPassword.value
+}
 function updatePassword() {
   const res = useNuxtApp().$apiFetch("/graphql", {
     body: JSON.stringify({
@@ -232,6 +341,40 @@ function updatePassword() {
   });
   useNuxtApp().$awn.success("Password Successufully Changed!!!");
 }
+
+function revokeUserTokens() {
+  let onOk = () => {
+    const resRevokeTokens = useNuxtApp().$apiFetch("/graphql", {
+      body: JSON.stringify({
+        query: `
+        mutation{
+          revokeUserTokens(email:"${user.value.email}"){
+            status
+          }
+        }
+      `,
+      }),
+    });
+    useNuxtApp().$awn.success("All of your token has been deleted!!!");
+    setTimeout(() => {
+      removeUser();
+      window.location.href = "/";
+    }, 2000);
+  };
+  let onCancel = () => {
+    useNuxtApp().$awn.info("You pressed Cancel");
+  };
+  useNuxtApp().$awn.confirm(
+    "This will log you out of JinnAdx from every device you're currently logged in on.",
+    onOk,
+    onCancel,
+    {
+      labels: {
+        confirm: "Dangerous action",
+      },
+    }
+  );
+}
 onMounted(async () => {
   const resUser = await useNuxtApp().$apiFetch("/graphql", {
     body: JSON.stringify({
@@ -245,6 +388,21 @@ onMounted(async () => {
     `,
     }),
   });
+  const resTokens = await useNuxtApp().$apiFetch("/graphql", {
+    body: JSON.stringify({
+      query: `
+      query{
+        userTokens(email:"${getUser()?.email}"){
+          id
+          token
+          name
+          last_used_at
+        }
+      }
+    `,
+    }),
+  });
+  tokens.value = resTokens.data.userTokens;
   user.value = resUser.data.user;
 });
 </script>

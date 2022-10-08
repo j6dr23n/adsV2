@@ -27,6 +27,7 @@
               dark:focus:border-blue-500
             "
           >
+          <option value="">Select Domain</option>
             <option
               :value="item.id"
               v-for="(item, index) in domains"
@@ -139,9 +140,9 @@ useHead({
 });
 const { getUser } = useAuth();
 const search = ref({
-  domain: null,
-  startDate: null,
-  endDate: null,
+  domain: "",
+  startDate: new Date().toISOString().slice(0,10),
+  endDate: new Date().toISOString().slice(0,10),
 });
 const fetchDataHandler = ref(null);
 async function fetchData() {

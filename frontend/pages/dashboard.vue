@@ -43,7 +43,7 @@
                   </div>
                   <div class="self-center ml-auto">
                     <h3 class="my-1 font-semibold text-2xl dark:text-slate-200">
-                      {{ nFormatter(results.eCPM,1) }}
+                      {{ nFormatter(results.eCPM, 1) }}
                     </h3>
                     <p class="text-gray-400 mb-0 font-medium">eCPM</p>
                   </div>
@@ -89,7 +89,7 @@
                       <h3
                         class="my-1 font-semibold text-2xl dark:text-slate-200"
                       >
-                        {{ nFormatter(results.imperssions,1) }}
+                        {{ nFormatter(results.imperssions, 1) }}
                       </h3>
                     </h3>
                     <p class="text-gray-400 mb-0 font-medium">Imperssions</p>
@@ -133,7 +133,7 @@
                   </div>
                   <div class="self-center ml-auto">
                     <h3 class="my-1 font-semibold text-2xl dark:text-slate-200">
-                      ${{ nFormatter(results.revenue,1) }}
+                      ${{ nFormatter(results.revenue, 1) }}
                     </h3>
                     <p class="text-gray-400 mb-0 font-medium">Revenue</p>
                   </div>
@@ -176,7 +176,7 @@
                   </div>
                   <div class="self-center ml-auto">
                     <h3 class="my-1 font-semibold text-2xl dark:text-slate-200">
-                      {{ nFormatter(results.clicks,1) }}
+                      {{ nFormatter(results.clicks, 1) }}
                     </h3>
                     <p class="text-gray-400 mb-0 font-medium">Clicks</p>
                   </div>
@@ -282,7 +282,7 @@ async function dateRange(val) {
 }
 onMounted(async () => {
   try {
-    if (isAdmin) {
+    if (isAdmin.value) {
       const res = await useNuxtApp().$apiFetch("/graphql", {
         body: JSON.stringify({
           query: `
@@ -315,7 +315,7 @@ onMounted(async () => {
       results.value = res.data.allAdsResolver[0];
       resChart.value = chartRes.data.ads;
     }
-    if (!isAdmin) {
+    if (!isAdmin.value) {
       const res = await useNuxtApp().$apiFetch("/graphql", {
         body: JSON.stringify({
           query: `

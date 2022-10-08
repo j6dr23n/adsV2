@@ -15,9 +15,6 @@ final class LoginUserResolver
     public function __invoke($_, array $args)
     {
         $user = User::where('email', $args['email'])->firstOrFail();
-        if ($user->tokens() !== null) {
-            $user->tokens()->delete();
-        }
         $token = $user->createToken($args['email'])->plainTextToken;
         if (! $user || ! Hash::check($args['password'], $user->password)) {
             throw ValidationException::withMessages([
