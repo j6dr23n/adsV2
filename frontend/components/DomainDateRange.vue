@@ -148,7 +148,7 @@ const search = ref({
 });
 const fetchDataHandler = ref(null);
 async function fetchData() {
-  if (search.value.domain !== null) {
+  if (search.value.domain !== "") {
     const searchData = await useNuxtApp().$apiFetch("/graphql", {
       body: JSON.stringify({
         query: `
@@ -200,7 +200,7 @@ async function fetchData() {
   if (
     search.value.startDate !== null &&
     search.value.endDate !== null &&
-    search.value.domain !== null
+    search.value.domain !== ""
   ) {
     const domainDateRange = await useNuxtApp().$apiFetch("/graphql", {
       body: JSON.stringify({
