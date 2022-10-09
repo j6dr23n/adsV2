@@ -93,7 +93,13 @@
     </div>
   </div>
 </template>
-  <script setup>
+<script setup>
+definePageMeta({
+  middleware: "admin",
+});
+useHead({
+  title: "Create domain"
+})
 const user = ref({
   domain: "",
 });

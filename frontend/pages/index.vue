@@ -82,6 +82,7 @@ const password = ref("");
 const errors = ref();
 useHead({
   script: [{ src: "/assets/libs/simplebar/simplebar.min.js", body: true }],
+  title: "Login"
 });
 definePageMeta({
   layout: "auth",

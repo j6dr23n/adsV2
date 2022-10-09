@@ -68,6 +68,12 @@
 </template>
 <script setup>
 import moment from "moment";
+useHead({
+  title: "All user"
+})
+definePageMeta({
+  middleware: "admin",
+});
 const users = ref({});
 
 const res = await useNuxtApp().$apiFetch("/graphql", {

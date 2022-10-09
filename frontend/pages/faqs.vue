@@ -295,6 +295,9 @@
   </div>
 </template>
 <script setup>
+useHead({
+  title: "FAQs"
+})
 definePageMeta({
   middleware: "auth",
 });

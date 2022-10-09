@@ -310,6 +310,9 @@
   </div>
 </template> 
 <script setup>
+useHead({
+  title: "Settings"
+})
 definePageMeta({
   middleware: "auth",
 });
@@ -323,7 +326,7 @@ const tokens = ref({});
 const showPassword = ref(false);
 
 function toggleShow() {
-  showPassword.value = !showPassword.value
+  showPassword.value = !showPassword.value;
 }
 function updatePassword() {
   const res = useNuxtApp().$apiFetch("/graphql", {

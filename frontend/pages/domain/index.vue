@@ -41,7 +41,8 @@
                   text-sm
                   hover:bg-white hover:border-primary-500-500 hover:text-black
                 "
-                :href="item?.domain">{{ item?.domain }}</a
+                :href="item?.domain"
+                >{{ item?.domain }}</a
               >
             </td>
             <td class="px-5 py-3">
@@ -69,6 +70,12 @@
 </template>
   <script setup>
 import moment from "moment";
+useHead({
+  title: "All domain"
+})
+definePageMeta({
+  middleware: "admin",
+});
 const domains = ref({});
 
 const res = await useNuxtApp().$apiFetch("/graphql", {

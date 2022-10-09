@@ -53,6 +53,7 @@
   <script setup>
   useHead({
     script: [{ src: "/assets/libs/simplebar/simplebar.min.js", body: true }],
+    title: "Register"
   });
   definePageMeta({
     layout: "auth",

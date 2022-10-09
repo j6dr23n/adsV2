@@ -89,6 +89,9 @@
 </template>
 <script setup>
 import moment from "moment";
+useHead({
+  title: "Reports",
+});
 definePageMeta({
   middleware: "auth",
 });

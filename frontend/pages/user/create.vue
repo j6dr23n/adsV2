@@ -215,6 +215,12 @@
 </template>
 <script setup>
 import $ from "jquery";
+useHead({
+  title: "Create user"
+})
+definePageMeta({
+  middleware: "admin",
+});
 const user = ref({
   isAdmin: false,
 });

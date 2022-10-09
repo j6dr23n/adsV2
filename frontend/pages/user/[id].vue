@@ -215,6 +215,12 @@
 </template>
   <script setup>
 import $ from "jquery";
+useHead({
+  title:"Edit user"
+})
+definePageMeta({
+  middleware: "admin",
+});
 const user = ref({
   isAdmin: false,
 });

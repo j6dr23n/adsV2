@@ -139,7 +139,13 @@
     </div>
   </div>
 </template>
-    <script setup>
+<script setup>
+definePageMeta({
+  middleware: "admin",
+});
+useHead({
+  title: "Edit domain"
+})
 const domain = ref({});
 const email = ref(null);
 const resDomain = await useNuxtApp().$apiFetch("/graphql", {

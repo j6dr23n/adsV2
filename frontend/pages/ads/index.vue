@@ -75,6 +75,12 @@
 </template>
 <script setup>
 import moment from "moment";
+definePageMeta({
+  middleware: "admin",
+});
+useHead({
+  title: "All ads"
+})
 const ads = ref();
 
 const res = await useNuxtApp().$apiFetch("/graphql", {

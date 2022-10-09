@@ -201,7 +201,9 @@
             "
           >
             <div class="chart-demo">
-              <h3 class="text-center text-black-500 text-md outline card-title">Chart day last 7 days</h3>
+              <h3 class="text-center text-black-500 text-md outline card-title">
+                Chart day last 7 days
+              </h3>
               <div id="apex_area1" class="apex-charts"></div>
             </div>
           </div>
@@ -248,6 +250,7 @@ definePageMeta({
   middleware: "auth",
 });
 useHead({
+  title: "Dashboard",
   script: [
     { src: "/assets/libs/chart.js/chart.min.js", body: true },
     { src: "/assets/libs/apexcharts/apexcharts.min.js", body: true },

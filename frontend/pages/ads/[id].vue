@@ -15,7 +15,13 @@
         "
       >
         <div
-          class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12"
+          class="
+            col-span-12
+            sm:col-span-12
+            md:col-span-12
+            lg:col-span-12
+            xl:col-span-12
+          "
         >
           <div class="card">
             <div class="card-header">
@@ -312,6 +318,12 @@
   </div>
 </template>
 <script setup>
+definePageMeta({
+  middleware: "admin",
+});
+useHead({
+  title: "Edit ads",
+});
 const errors = ref();
 const ads = ref({
   user_id: "",
