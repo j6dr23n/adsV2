@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-    const { isAdmin, removeUser } = useAuth()
+    const { isLoggedIn,isAdmin, removeUser } = useAuth()
     if (process.client) {
-        if (!isAdmin.value) {
+        if (!isLoggedIn.value || !isAdmin.value ) {
             removeUser()
             window.location.pathname = '/'
         }
