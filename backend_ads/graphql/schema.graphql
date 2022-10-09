@@ -16,13 +16,13 @@ type Query {
         email: String
             @eq
             @rules(apply: ["prohibits:id", "required_without:id", "email"])
-    ): User @find
+    ): User @find @guard
 
     "List multiple users."
     users(
         "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
         email: String @where(operator: "like")
-    ): [User!]! @all
+    ): [User!]! @all @guard
 
     ads(
         id: ID @eq
@@ -34,7 +34,9 @@ type Query {
     allAdsResolver: [DateRange!]!
         @field(resolver: "App\\GraphQL\\Queries\\allAdsResolver")
 
-    domain(user_id: ID @eq): [Domain!]! @paginate(defaultCount: 10)
+    domain(id: Int! @eq, user_id: Int @eq): [Domain!]! @guard @all
+
+    domains: [Domain!]! @guard @all
 
     dateRangeResolver(
         user_id: ID
@@ -42,9 +44,11 @@ type Query {
         startDate: Date!
         endDate: Date!
     ): [DateRange!]!
+        @guard
         @field(resolver: "App\\GraphQL\\Queries\\DateRangeResolver")
 
     userTokens(email: String @eq): [userToken!]!
+        @guard
         @field(resolver: "App\\GraphQL\\Queries\\UserTokenResolver")
 }
 
@@ -71,8 +75,7 @@ type Mutation {
         email: String!
         password: String! @hash
         isAdmin: Int!
-    ): User @create
-    # @guard @can(ability: "create", model: "App\\Models\\User")
+    ): User @create @guard @can(ability: "create", model: "App\\Models\\User")
     updateUser(
         id: Int!
         name: String
@@ -80,6 +83,14 @@ type Mutation {
         password: String @hash
         isAdmin: Int!
     ): User @update @guard @can(ability: "update", model: "App\\Models\\User")
+    createDomain(user_id: Int!, domain: String!): Domain
+        @create
+        @guard
+        @can(ability: "create", model: "App\\Models\\Domain")
+    updateDomain(id: Int!, domain: String!): Domain
+        @update
+        @guard
+        @can(ability: "update", model: "App\\Models\\Domain")
     loginUser(
         email: String!
         password: String!
@@ -91,9 +102,11 @@ type Mutation {
         old_password: String!
         new_password: String!
     ): UpdatePasswordResponse!
+        @guard
         @field(resolver: "App\\GraphQL\\Mutations\\ChangeUserPassword")
 
     revokeUserTokens(email: String!): revokeUserTokens!
+        @guard
         @field(resolver: "App\\GraphQL\\Mutations\\RevokeUserTokensResolver")
 }
 

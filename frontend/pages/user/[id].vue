@@ -15,7 +15,7 @@
         "
       >
         <div
-          class="sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12"
+          class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12"
         >
           <div class="card">
             <div class="card-header">

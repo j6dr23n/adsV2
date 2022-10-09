@@ -27,7 +27,7 @@
               dark:focus:border-blue-500
             "
           >
-          <option value="">Select Domain</option>
+            <option value="">Select Domain</option>
             <option
               :value="item.id"
               v-for="(item, index) in domains"
@@ -139,10 +139,12 @@ useHead({
   ],
 });
 const { getUser } = useAuth();
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
 const search = ref({
   domain: "",
-  startDate: new Date().toISOString().slice(0,10),
-  endDate: new Date().toISOString().slice(0,10),
+  startDate: yesterday.toISOString().slice(0, 10),
+  endDate: new Date().toISOString().slice(0, 10),
 });
 const fetchDataHandler = ref(null);
 async function fetchData() {
@@ -150,67 +152,81 @@ async function fetchData() {
     const searchData = await useNuxtApp().$apiFetch("/graphql", {
       body: JSON.stringify({
         query: `
-          query{
-            ads(user_id:${getUser()?.id},domain_id:${search.value.domain}){
-              id
-              imperssions
-              clicks
-              domain{
-                domain
+            query{
+              ads(user_id:${getUser()?.id},domain_id:${search.value.domain}){
+                id
+                imperssions
+                clicks
+                domain{
+                  domain
+                }
+                eCPM
+                revenue
+                created_at
               }
-              eCPM
-              revenue
-              created_at
             }
-          }
-      `,
+        `,
       }),
     });
-    emit("searchData", searchData.data.ads);
+    if (Object.values(searchData.data.ads[0]).includes(null)) {
+      useNuxtApp().$awn.alert("This Domain has no data!!!");
+    }else{
+      emit("searchData", searchData.data.ads);
+    }
   }
   if (search.value.startDate !== null && search.value.endDate !== null) {
     const dateRange = await useNuxtApp().$apiFetch("/graphql", {
       body: JSON.stringify({
         query: `
-        query{
-            dateRangeResolver(user_id:${getUser()?.id},startDate:"${
+          query{
+              dateRangeResolver(user_id:${getUser()?.id},startDate:"${
           search.value.startDate
         }",endDate:"${search.value.endDate}") {
-              imperssions
-              clicks
-              revenue
-              eCPM
+                imperssions
+                clicks
+                revenue
+                eCPM
+              }
             }
-          }
-        `,
+          `,
       }),
     });
-    emit("dateRange", dateRange.data.dateRangeResolver);
+    if (Object.values(dateRange.data.dateRangeResolver[0]).includes(null)) {
+      useNuxtApp().$awn.alert("This Date Range has no data!!!");
+    }else{
+      emit("dateRange", dateRange.data.dateRangeResolver);
+    }
   }
   if (
     search.value.startDate !== null &&
     search.value.endDate !== null &&
     search.value.domain !== null
   ) {
-    const dateRange = await useNuxtApp().$apiFetch("/graphql", {
+    const domainDateRange = await useNuxtApp().$apiFetch("/graphql", {
       body: JSON.stringify({
         query: `
-        query{
-            dateRangeResolver(user_id:${getUser()?.id},domain_id:${
+          query{
+              dateRangeResolver(user_id:${getUser()?.id},domain_id:${
           search.value.domain
         },startDate:"${search.value.startDate}",endDate:"${
           search.value.endDate
         }") {
-              imperssions
-              clicks
-              revenue
-              eCPM
+                imperssions
+                clicks
+                revenue
+                eCPM
+              }
             }
-          }
-        `,
+          `,
       }),
     });
-    emit("dateRange", dateRange.data.dateRangeResolver);
+    if (
+      Object.values(domainDateRange.data.dateRangeResolver[0]).includes(null)
+    ) {
+      useNuxtApp().$awn.alert("This Domain & Date Range has no data!!!");
+    }else{
+      emit("dateRange", domainDateRange.data.dateRangeResolver);
+    }
   }
 }
 
@@ -226,10 +242,6 @@ watch(
     deep: true,
   }
 );
-
-function searchPosts() {
-  useRouter().go(`/?search=${search.value.title}&page=1`);
-}
 
 onMounted(async () => {
   const user = await useNuxtApp().$apiFetch("/graphql", {

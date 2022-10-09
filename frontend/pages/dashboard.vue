@@ -201,6 +201,7 @@
             "
           >
             <div class="chart-demo">
+              <h3 class="text-center text-black-500 text-md outline card-title">Chart day last 7 days</h3>
               <div id="apex_area1" class="apex-charts"></div>
             </div>
           </div>

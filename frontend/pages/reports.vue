@@ -49,7 +49,7 @@
                 {{
                   item.hasOwnProperty("domain")
                     ? item?.domain?.domain?.substring(0, 30)
-                    : "all domain"
+                    : "Totals"
                 }}
               </a>
             </td>
