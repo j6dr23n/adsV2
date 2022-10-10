@@ -293,11 +293,84 @@
                 </ul>
               </div>
             </li>
+            <li class="dropdown lg:hidden md:hidden" v-if="isAdmin">
+              <button
+                type="button"
+                class="
+                  dropdown-toggle
+                  flex
+                  w-full
+                  items-center
+                  py-2
+                  rounded-full
+                  px-3
+                  font-medium
+                  md:border-0 md:p-0
+                "
+                aria-expanded="false"
+                id="navProfileLink"
+                data-dropdown-toggle="navProfile"
+              >
+                <img
+                  class="h-8 w-8 rounded-full"
+                  src="/assets/images/users/avatar-2.jpg"
+                  alt="user photo"
+                />
+                <span class="ml-2 text-left xl:block">
+                  <span class="block font-medium text-gray-400">{{
+                    getUser()?.email
+                  }}</span>
+                  <span class="-mt-1 block text-sm font-medium text-gray-500">{{
+                    isAdmin === true ? "Admin" : "Member"
+                  }}</span>
+                </span>
+                <i class="ti ti-chevron-down ml-auto lg:ml-1"></i>
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                id="navProfile"
+                class="
+                dropdown-menu
+                  z-10
+                  my-1
+                  hidden
+                  w-full
+                  list-none
+                  divide-y divide-gray-100
+                  rounded
+                  bg-gray-800
+                  md:bg-white
+                  text-base
+                  shadow
+                  dark:divide-gray-600
+                  border border-slate-700
+                  md:border-white
+                  dark:border-slate-700/50 dark:bg-gray-900
+                  md:w-44
+                  dropdown-menu
+                "
+              >
+                <ul class="py-1">
+                  <li>
+                    <a
+                      href="/settings"
+                      class="nav-link dark:hover:bg-slate-800/70"
+                      >Settings</a
+                    >
+                  </li>
+                  <li>
+                    <a @click.prevent="logout" class="nav-link dark:hover:bg-slate-800/70"
+                      >Sign Out</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
           </ClientOnly>
         </ul>
       </div>
       <div class="order-1 ml-auto flex items-center md:order-2">
-        <div class="mr-2 lg:mr-0 dropdown relative">
+        <div class="mr-2 lg:mr-0 dropdown relative hidden md:block">
           <button
             type="button"
             class="
@@ -366,22 +439,6 @@
               >
             </div>
             <ul class="py-1" aria-labelledby="navUserdata">
-              <li>
-                <a
-                  href="/dashboard"
-                  class="
-                    block
-                    py-2
-                    px-4
-                    text-sm text-gray-700
-                    hover:bg-gray-100
-                    dark:text-gray-200
-                    dark:hover:bg-gray-900/20
-                    dark:hover:text-white
-                  "
-                  >Dashboard</a
-                >
-              </li>
               <li>
                 <a
                   href="/settings"

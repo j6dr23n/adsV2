@@ -8138,6 +8138,18 @@ input:checked + .custom-switch:before {
     grid-column: span 4 / span 4 !important;
   }
 
+  .xs\:hidden{
+    display: none !important;
+  }
+
+  .xs\:invisible{
+    visibility: hidden !important;
+  }
+
+  .xs\:visible {
+    visibility: visible !important;
+  }
+
   .xs\:mt-0 {
     margin-top: 0px !important;
   }
@@ -8220,6 +8232,18 @@ input:checked + .custom-switch:before {
 
   .sm\:block {
     display: block !important;
+  }
+
+  .sm\:hidden{
+    display: none !important;
+  }
+
+  .sm\:invisible{
+    visibility: hidden !important;
+  }
+
+  .sm\:visible {
+    visibility: visible !important;
   }
 
   .sm\:inline-block {
@@ -8423,6 +8447,14 @@ input:checked + .custom-switch:before {
 
   .md\:hidden {
     display: none !important;
+  }
+
+  .md\:invisible{
+    visibility: hidden !important;
+  }
+
+  .md\:visible {
+    visibility: visible !important;
   }
 
   .md\:h-auto {
@@ -8753,6 +8785,18 @@ input:checked + .custom-switch:before {
     display: block !important;
   }
 
+  .lg\:hidden{
+    display: none !important;
+  }
+
+  .lg\:invisible{
+    visibility: hidden !important;
+  }
+
+  .lg\:visible {
+    visibility: visible !important;
+  }
+
   .lg\:w-1\/4 {
     width: 25% !important;
   }
@@ -8914,6 +8958,18 @@ input:checked + .custom-switch:before {
 
   .xl\:block {
     display: block !important;
+  }
+
+  .xl\:hidden{
+    display: none !important;
+  }
+
+  .xl\:invisible{
+    visibility: hidden !important;
+  }
+
+  .xl\:visible {
+    visibility: visible !important;
   }
 
   .xl\:w-1\/4 {
