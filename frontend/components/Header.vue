@@ -293,7 +293,7 @@
                 </ul>
               </div>
             </li>
-            <li class="dropdown lg:hidden md:hidden" v-if="isAdmin">
+            <li class="dropdown lg:hidden md:hidden">
               <button
                 type="button"
                 class="
@@ -330,7 +330,7 @@
               <div
                 id="navProfile"
                 class="
-                dropdown-menu
+                  dropdown-menu
                   z-10
                   my-1
                   hidden
@@ -359,7 +359,9 @@
                     >
                   </li>
                   <li>
-                    <a @click.prevent="logout" class="nav-link dark:hover:bg-slate-800/70"
+                    <a
+                      @click.prevent="logout"
+                      class="nav-link dark:hover:bg-slate-800/70"
                       >Sign Out</a
                     >
                   </li>
@@ -468,7 +470,7 @@
                     dark:hover:bg-gray-900/20
                     dark:hover:text-white
                   "
-                  >Sign out</a
+                  >Logout</a
                 >
               </li>
             </ul>
