@@ -293,6 +293,60 @@
                 </ul>
               </div>
             </li>
+            <li class="dropdown" v-if="isAdmin">
+              <button
+                id="navInfoLink"
+                data-dropdown-toggle="navInfo"
+                class="
+                  dropdown-toggle
+                  flex
+                  w-full
+                  items-center
+                  border-b border-gray-800
+                  py-2
+                  px-3
+                  font-medium
+                  md:border-0 md:p-0
+                "
+              >
+                <i class="ti ti-info-circle mr-1 pb-1 text-lg"></i> Info
+                <i class="ti ti-chevron-down ml-auto lg:ml-1"></i>
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                id="navInfo"
+                class="
+                  dropdown-menu
+                  z-10
+                  my-1
+                  hidden
+                  w-full
+                  list-none
+                  divide-y divide-gray-100
+                  rounded
+                  bg-gray-800
+                  md:bg-white
+                  text-base
+                  shadow
+                  dark:divide-gray-600
+                  border border-slate-700
+                  md:border-white
+                  dark:border-slate-700/50 dark:bg-gray-900
+                  md:w-44
+                  dropdown-menu
+                "
+              >
+                <ul class="py-1">
+                  <li>
+                    <a
+                      href="/info/create"
+                      class="nav-link dark:hover:bg-slate-800/70"
+                      >Create</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
             <li class="dropdown lg:hidden md:hidden">
               <button
                 type="button"

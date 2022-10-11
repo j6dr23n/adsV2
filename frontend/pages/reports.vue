@@ -4,6 +4,7 @@
     <div
       class="container mx-auto px-2 min-h-[calc(100vh-138px)] relative pb-14"
     >
+      <Alert />
       <DomainDateRange @search-data="searchData" @date-range="dateRange" />
 
       <Table title="Reports">
@@ -36,12 +37,9 @@
               <a
                 :href="item?.domain?.domain"
                 class="
-                  bg-primary-500
-                  text-white
+                  text-black
                   px-3
                   py-2
-                  border
-                  rounded
                   text-sm
                   hover:bg-white hover:border-primary-500-500 hover:text-black
                 "

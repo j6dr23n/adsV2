@@ -7,6 +7,12 @@
         </div>
         <!--end card-header-->
         <div class="card-body">
+          <FormUserEmailInput
+            class="mb-2"
+            @user-domain="userDomain"
+            @selected-user="selectedUser"
+            v-if="isAdmin"
+          />
           <select
             v-model="search.domain"
             id="multiSelect"
@@ -114,8 +120,6 @@
   </div>
 </template>
 <script setup>
-const emit = defineEmits(["searchData", "dateRange"]);
-const domains = ref();
 useHead({
   script: [
     {
@@ -138,22 +142,46 @@ useHead({
     },
   ],
 });
-const { getUser } = useAuth();
+const emit = defineEmits(["searchData", "dateRange"]);
+const { getUser,isAdmin } = useAuth();
 const yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
+const user = ref({
+  id: getUser()?.id,
+});
+const domains = ref();
 const search = ref({
   domain: "",
   startDate: yesterday.toISOString().slice(0, 10),
   endDate: new Date().toISOString().slice(0, 10),
 });
 const fetchDataHandler = ref(null);
+watch(
+  search,
+  () => {
+    clearTimeout(fetchDataHandler.value);
+    fetchDataHandler.value = setTimeout(() => {
+      fetchData();
+    }, 300);
+  },
+  {
+    deep: true,
+  }
+);
+async function selectedUser(val) {
+  user.value.id = Number(val);
+}
+async function userDomain(val) {
+  domains.value = ref();
+  domains.value = val;
+}
 async function fetchData() {
   if (search.value.domain !== "") {
     const searchData = await useNuxtApp().$apiFetch("/graphql", {
       body: JSON.stringify({
         query: `
             query{
-              ads(user_id:${getUser()?.id},domain_id:${search.value.domain}){
+              ads(user_id:${user.value?.id},domain_id:${search.value.domain}){
                 id
                 imperssions
                 clicks
@@ -168,9 +196,11 @@ async function fetchData() {
         `,
       }),
     });
-    if (Object.values(searchData.data.ads[0]).includes(null)) {
+    if (
+      !Object.values(searchData.data.ads).some((x) => x !== null && x !== "")
+    ) {
       useNuxtApp().$awn.alert("This Domain has no data!!!");
-    }else{
+    } else {
       emit("searchData", searchData.data.ads);
     }
   }
@@ -179,9 +209,7 @@ async function fetchData() {
       body: JSON.stringify({
         query: `
           query{
-              dateRangeResolver(user_id:${getUser()?.id},startDate:"${
-          search.value.startDate
-        }",endDate:"${search.value.endDate}") {
+              dateRangeResolver(user_id:${user.value?.id},startDate:"${search.value.startDate}",endDate:"${search.value.endDate}") {
                 imperssions
                 clicks
                 revenue
@@ -191,9 +219,13 @@ async function fetchData() {
           `,
       }),
     });
-    if (Object.values(dateRange.data.dateRangeResolver[0]).includes(null)) {
+    if (
+      !Object.values(dateRange.data.dateRangeResolver[0]).some(
+        (x) => x !== null && x !== ""
+      )
+    ) {
       useNuxtApp().$awn.alert("This Date Range has no data!!!");
-    }else{
+    } else {
       emit("dateRange", dateRange.data.dateRangeResolver);
     }
   }
@@ -206,11 +238,7 @@ async function fetchData() {
       body: JSON.stringify({
         query: `
           query{
-              dateRangeResolver(user_id:${getUser()?.id},domain_id:${
-          search.value.domain
-        },startDate:"${search.value.startDate}",endDate:"${
-          search.value.endDate
-        }") {
+              dateRangeResolver(user_id:${user.value?.id},domain_id:${search.value.domain},startDate:"${search.value.startDate}",endDate:"${search.value.endDate}") {
                 imperssions
                 clicks
                 revenue
@@ -221,34 +249,23 @@ async function fetchData() {
       }),
     });
     if (
-      Object.values(domainDateRange.data.dateRangeResolver[0]).includes(null)
+      !Object.values(domainDateRange.data.dateRangeResolver[0]).some(
+        (x) => x !== null && x !== ""
+      )
     ) {
       useNuxtApp().$awn.alert("This Domain & Date Range has no data!!!");
-    }else{
+    } else {
       emit("dateRange", domainDateRange.data.dateRangeResolver);
     }
   }
 }
 
-watch(
-  search,
-  () => {
-    clearTimeout(fetchDataHandler.value);
-    fetchDataHandler.value = setTimeout(() => {
-      fetchData();
-    }, 300);
-  },
-  {
-    deep: true,
-  }
-);
-
 onMounted(async () => {
-  const user = await useNuxtApp().$apiFetch("/graphql", {
+  const resUser = await useNuxtApp().$apiFetch("/graphql", {
     body: JSON.stringify({
       query: `
       query{
-        user(id:${getUser()?.id}){
+        user(id:${user.value?.id}){
           domains{
             id
             domain
@@ -258,6 +275,6 @@ onMounted(async () => {
       `,
     }),
   });
-  domains.value = user.data.user.domains;
+  domains.value = resUser.data.user.domains;
 });
 </script>

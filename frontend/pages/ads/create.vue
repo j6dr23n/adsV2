@@ -29,10 +29,24 @@
             </div>
             <!--end card-header-->
             <div class="card-body">
-              <FormUserEmailInput
-                @user-domain="userDomain"
-                @selected-user="selectedUser"
-              />
+              <div class="relative z-0 mb-6 w-full group">
+                <label
+                  for="countries"
+                  class="
+                    block
+                    mb-2
+                    text-sm
+                    font-medium
+                    text-gray-900
+                    dark:text-gray-400
+                  "
+                  >User Email</label
+                >
+                <FormUserEmailInput
+                  @user-domain="userDomain"
+                  @selected-user="selectedUser"
+                />
+              </div>
               <div class="relative z-0 mb-6 w-full group">
                 <label
                   for="domains"
@@ -290,8 +304,8 @@ definePageMeta({
   middleware: "admin",
 });
 useHead({
-  title: "Create ads"
-})
+  title: "Create ads",
+});
 const domains = ref();
 const errors = ref();
 const ads = ref({

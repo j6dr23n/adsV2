@@ -50,6 +50,8 @@ type Query {
     userTokens(email: String @eq): [userToken!]!
         @guard
         @field(resolver: "App\\GraphQL\\Queries\\UserTokenResolver")
+
+    infos(limit: Int @limit): [Info!]! @all @orderBy(column: "created_at", direction: DESC) @guard
 }
 
 type Mutation {
@@ -108,6 +110,15 @@ type Mutation {
     revokeUserTokens(email: String!): revokeUserTokens!
         @guard
         @field(resolver: "App\\GraphQL\\Mutations\\RevokeUserTokensResolver")
+
+    createInfo(text:String!): Info! @create @guard @can(ability: "create", model: "App\\Models\\Info")
+}
+
+type Info{
+    id: ID!
+    text: String!
+    created_at: DateTime!
+    updated_at: DateTime!
 }
 
 type userToken {

@@ -4,6 +4,7 @@
     <div
       class="container mx-auto px-2 min-h-[calc(100vh-138px)] relative pb-14"
     >
+      <Alert />
       <DomainDateRange @search-data="searchData" @date-range="dateRange" />
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 mt-2">
         <div class="sm:col-span-3 md:col-span-4 lg:col-span-4 xl:col-span-4">
@@ -202,7 +203,7 @@
           >
             <div class="chart-demo">
               <h3 class="text-center text-black-500 text-md outline card-title">
-                Chart day last 7 days
+                Chart last 7 days
               </h3>
               <div id="apex_area1" class="apex-charts"></div>
             </div>

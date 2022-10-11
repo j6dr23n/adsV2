@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Ads;
 use App\Models\ContactForm;
 use App\Models\Domain;
+use App\Models\Info;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -21,10 +22,11 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(5)->create();
         // Domain::factory(3)->create();
-        Ads::factory(50)->create([
-            'user_id' => 2,
-            'domain_id' => 2
-        ]);
+        // Ads::factory(50)->create([
+        //     'user_id' => 2,
+        //     'domain_id' => 2
+        // ]);
+        Info::factory(3)->create();
         // ContactForm::factory(30)->create();
     }
 }
