@@ -11,12 +11,10 @@
       "
       id="alert-box"
       role="alert"
-      v-for="(item, index) in infos"
-      :key="index"
     >
       <i class="fas fa-triangle-exclamation flex-shrink-0 text-blue-700"></i>
       <div class="ml-3 text-sm font-medium text-blue-700">
-        {{ item?.text }}
+        {{ info?.text }}
       </div>
 
       <button
@@ -48,7 +46,7 @@
 </template>
 <script setup>
 import moment from "moment";
-const infos = ref({});
+const info = ref({});
 useHead({
   link: [{ rel: "stylesheet", href: "/assets/libs/magic.css/magic.min.css" }],
 });
@@ -65,7 +63,7 @@ const resInfo = await useNuxtApp().$apiFetch("/graphql", {
   }),
 });
 onMounted(() => {
-  infos.value = resInfo.data.infos;
+  info.value = resInfo.data.infos[0];
   var alert_del = document.querySelectorAll(".alert-hidden");
   alert_del.forEach((x) =>
     x.addEventListener("click", function () {
