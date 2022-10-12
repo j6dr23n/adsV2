@@ -11,9 +11,8 @@
             <th scope="col" class="px-5 py-3 text-slate-200">Email</th>
             <th scope="col" class="px-5 py-3 text-slate-200">Domain</th>
             <th scope="col" class="px-5 py-3 text-slate-200">Created At</th>
-            <th scope="col" class="px-6 py-3">
-              <span class="sr-only">Edit</span>
-            </th>
+            <th scope="col" class="px-5 py-3 text-slate-200">Edit</th>
+            <th scope="col" class="px-5 py-3 text-slate-200">Delete</th>
           </tr>
         </thead>
         <tbody class="bg-gray-200">
@@ -32,14 +31,12 @@
             <td class="px-5 py-3">
               <a
                 class="
-                  bg-primary-500
-                  text-white
+                  text-black
                   px-3
                   py-2
-                  border
                   rounded
                   text-sm
-                  hover:bg-white hover:border-primary-500-500 hover:text-black
+                  hover:bg-white hover:text-black
                 "
                 :href="item?.domain"
                 >{{ item?.domain }}</a
@@ -60,6 +57,18 @@
                 >Edit</a
               >
             </td>
+            <td class="px-6 py-4 text-right">
+              <a
+                @click="deleteDomain(item?.id)"
+                class="
+                  font-medium
+                  text-red-600
+                  dark:text-red-500
+                  hover:underline
+                "
+                >Delete</a
+              >
+            </td>
           </tr>
         </tbody>
       </Table>
@@ -71,8 +80,8 @@
   <script setup>
 import moment from "moment";
 useHead({
-  title: "All domain"
-})
+  title: "All domain",
+});
 definePageMeta({
   middleware: "admin",
 });
@@ -94,6 +103,31 @@ const res = await useNuxtApp().$apiFetch("/graphql", {
       `,
   }),
 });
+function deleteDomain(id) {
+  let onOk = () => {
+    const resDeleteDomain = useNuxtApp().$apiFetch("/graphql", {
+      body: JSON.stringify({
+        query: `
+        mutation{
+          deleteDomain(id:${id}){
+            id
+          }
+        }
+      `,
+      }),
+    });
+    useNuxtApp().$awn.success("This Domain Deleted!!!");
+    location.reload(true);
+  };
+  let onCancel = () => {
+    useNuxtApp().$awn.info("You pressed Cancel");
+  };
+  useNuxtApp().$awn.confirm("Are u sure to delete?", onOk, onCancel, {
+    labels: {
+      confirm: "Dangerous action",
+    },
+  });
+}
 onMounted(() => {
   domains.value = res.data.domains;
 });

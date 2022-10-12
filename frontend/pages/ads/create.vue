@@ -283,6 +283,52 @@
                   >
                 </div>
               </div>
+              <div class="relative z-0 mb-6 w-full group">
+                <input
+                  type="date"
+                  v-model="ads.created_at"
+                  name="floating_email"
+                  class="
+                    block
+                    py-2.5
+                    px-0
+                    w-full
+                    text-sm text-gray-900
+                    bg-transparent
+                    border-0 border-b border-gray-300
+                    appearance-none
+                    dark:text-white
+                    dark:border-gray-600
+                    dark:focus:border-blue-500
+                    focus:outline-none focus:ring-0 focus:border-blue-600
+                    peer
+                  "
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="floating_email"
+                  class="
+                    absolute
+                    text-sm text-gray-500
+                    dark:text-gray-400
+                    duration-300
+                    transform
+                    -translate-y-6
+                    scale-75
+                    top-3
+                    -z-10
+                    origin-[0]
+                    peer-focus:left-0
+                    peer-focus:text-blue-600
+                    peer-focus:dark:text-blue-500
+                    peer-placeholder-shown:scale-100
+                    peer-placeholder-shown:translate-y-0
+                    peer-focus:scale-75 peer-focus:-translate-y-6
+                  "
+                  >Select Date</label
+                >
+              </div>
               <button
                 @click.prevent="createAds"
                 class="btn bg-blue-500 text-white hover:bg-blue-600"
@@ -300,6 +346,7 @@
   </div>
 </template>
 <script setup>
+import moment from "moment";
 definePageMeta({
   middleware: "admin",
 });
@@ -309,12 +356,13 @@ useHead({
 const domains = ref();
 const errors = ref();
 const ads = ref({
-  user_id: "",
-  domain_id: "",
+  user_id: 2,
+  domain_id: 2,
   imperssions: 0,
   clicks: 0,
   revenue: 0,
   eCPM: 0,
+  created_at: new Date().toISOString().slice(0, 10),
 });
 async function userDomain(val) {
   domains.value = val;
@@ -328,7 +376,13 @@ async function createAds() {
       body: JSON.stringify({
         query: `
         mutation{
-          createAds(user_id:${ads.value.user_id},domain_id:${ads.value.domain_id},imperssions:${ads.value.imperssions},clicks:${ads.value.clicks},revenue:${ads.value.revenue},eCPM:${ads.value.eCPM}){
+          createAds(user_id:${ads.value.user_id},domain_id:${
+          ads.value.domain_id
+        },imperssions:${ads.value.imperssions},clicks:${
+          ads.value.clicks
+        },revenue:${ads.value.revenue},eCPM:${
+          ads.value.eCPM
+        },created_at:"${ads.value.created_at}"){
             id
           }
         }

@@ -301,6 +301,52 @@
                   >
                 </div>
               </div>
+              <div class="relative z-0 mb-6 w-full group">
+                <input
+                  type="date"
+                  v-model="ads.created_at"
+                  name="floating_email"
+                  class="
+                    block
+                    py-2.5
+                    px-0
+                    w-full
+                    text-sm text-gray-900
+                    bg-transparent
+                    border-0 border-b border-gray-300
+                    appearance-none
+                    dark:text-white
+                    dark:border-gray-600
+                    dark:focus:border-blue-500
+                    focus:outline-none focus:ring-0 focus:border-blue-600
+                    peer
+                  "
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="floating_email"
+                  class="
+                    absolute
+                    text-sm text-gray-500
+                    dark:text-gray-400
+                    duration-300
+                    transform
+                    -translate-y-6
+                    scale-75
+                    top-3
+                    -z-10
+                    origin-[0]
+                    peer-focus:left-0
+                    peer-focus:text-blue-600
+                    peer-focus:dark:text-blue-500
+                    peer-placeholder-shown:scale-100
+                    peer-placeholder-shown:translate-y-0
+                    peer-focus:scale-75 peer-focus:-translate-y-6
+                  "
+                  >Select Date</label
+                >
+              </div>
               <button
                 @click.prevent="updateAds"
                 class="btn bg-blue-500 text-white hover:bg-blue-600"
@@ -318,6 +364,7 @@
   </div>
 </template>
 <script setup>
+import moment from "moment";
 definePageMeta({
   middleware: "admin",
 });
@@ -332,6 +379,7 @@ const ads = ref({
   clicks: 0,
   revenue: 0,
   eCPM: 0,
+  created_at: new Date().toISOString().slice(0, 10),
 });
 const res = await useNuxtApp().$apiFetch("/graphql", {
   body: JSON.stringify({
@@ -353,6 +401,7 @@ const res = await useNuxtApp().$apiFetch("/graphql", {
             clicks
             revenue
             eCPM
+            created_at
           }
         }
         `,
@@ -370,7 +419,7 @@ async function updateAds() {
           ads.value.imperssions
         },clicks:${ads.value.clicks},revenue:${ads.value.revenue},eCPM:${
           ads.value.eCPM
-        }){
+        },created_at:"${ads.value.created_at}"){
             user{
               id
               email
@@ -405,5 +454,6 @@ async function updateAds() {
 }
 onMounted(() => {
   ads.value = res.data.ads[0];
+  ads.value.created_at = moment(res.data.ads[0].created_at).format("YYYY-MM-DD");
 });
 </script>

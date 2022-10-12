@@ -15,9 +15,8 @@
             <th scope="col" class="px-5 py-3 text-slate-200">Revenue</th>
             <th scope="col" class="px-5 py-3 text-slate-200">eCPM</th>
             <th scope="col" class="px-5 py-3 text-slate-200">Created At</th>
-            <th scope="col" class="px-6 py-3">
-              <span class="sr-only">Edit</span>
-            </th>
+            <th scope="col" class="px-5 py-3 text-slate-200">Edit</th>
+            <th scope="col" class="px-5 py-3 text-slate-200">Delete</th>
           </tr>
         </thead>
         <tbody class="bg-gray-200">
@@ -65,6 +64,18 @@
                 >Edit</a
               >
             </td>
+            <td class="px-6 py-4 text-right">
+              <a
+                @click="deleteAds(item?.id)"
+                class="
+                  font-medium
+                  text-red-600
+                  dark:text-red-500
+                  hover:underline
+                "
+                >Delete</a
+              >
+            </td>
           </tr>
         </tbody>
       </Table>
@@ -79,8 +90,8 @@ definePageMeta({
   middleware: "admin",
 });
 useHead({
-  title: "All ads"
-})
+  title: "All ads",
+});
 const ads = ref();
 
 const res = await useNuxtApp().$apiFetch("/graphql", {
@@ -99,11 +110,42 @@ const res = await useNuxtApp().$apiFetch("/graphql", {
               clicks
               revenue
               eCPM
+              created_at
             }
         }
     `,
   }),
 });
+function deleteAds(id) {
+  let onOk = () => {
+    const resDeleteAds = useNuxtApp().$apiFetch("/graphql", {
+      body: JSON.stringify({
+        query: `
+        mutation{
+          deleteAds(id:${id}){
+            id
+          }
+        }
+      `,
+      }),
+    });
+    useNuxtApp().$awn.success("This Ads Deleted!!!");
+    location.reload(true)
+  };
+  let onCancel = () => {
+    useNuxtApp().$awn.info("You pressed Cancel");
+  };
+  useNuxtApp().$awn.confirm(
+    "Are u sure to delete?",
+    onOk,
+    onCancel,
+    {
+      labels: {
+        confirm: "Dangerous action",
+      },
+    }
+  );
+}
 onMounted(() => {
   ads.value = res.data.ads;
 });

@@ -63,7 +63,7 @@ class DomainPolicy
      * @param  \App\Models\Domain  $domain
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Domain $domain)
+    public function delete(User $user)
     {
         return $user->isAdmin();
     }

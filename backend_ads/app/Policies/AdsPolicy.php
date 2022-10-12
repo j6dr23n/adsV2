@@ -64,7 +64,7 @@ class AdsPolicy
      * @param  \App\Models\Ads  $ads
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Ads $ads)
+    public function delete(User $user)
     {
         return $user->isAdmin();
     }

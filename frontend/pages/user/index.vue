@@ -12,9 +12,8 @@
             <th scope="col" class="px-5 py-3 text-slate-200">Email</th>
             <th scope="col" class="px-5 py-3 text-slate-200">isAdmin</th>
             <th scope="col" class="px-5 py-3 text-slate-200">Joined At</th>
-            <th scope="col" class="px-6 py-3">
-              <span class="sr-only">Edit</span>
-            </th>
+            <th scope="col" class="px-5 py-3 text-slate-200">Edit</th>
+            <th scope="col" class="px-5 py-3 text-slate-200">Delete</th>
           </tr>
         </thead>
         <tbody class="bg-gray-200">
@@ -58,6 +57,18 @@
                 >Edit</a
               >
             </td>
+            <td class="px-6 py-4 text-right">
+              <a
+                @click="deleteUser(item?.id)"
+                class="
+                  font-medium
+                  text-red-600
+                  dark:text-red-500
+                  hover:underline
+                "
+                >Delete</a
+              >
+            </td>
           </tr>
         </tbody>
       </Table>
@@ -69,8 +80,8 @@
 <script setup>
 import moment from "moment";
 useHead({
-  title: "All user"
-})
+  title: "All user",
+});
 definePageMeta({
   middleware: "admin",
 });
@@ -91,6 +102,31 @@ const res = await useNuxtApp().$apiFetch("/graphql", {
     `,
   }),
 });
+function deleteUser(id) {
+  let onOk = () => {
+    const resDeleteUser = useNuxtApp().$apiFetch("/graphql", {
+      body: JSON.stringify({
+        query: `
+        mutation{
+          deleteUser(id:${id}){
+            id
+          }
+        }
+      `,
+      }),
+    });
+    useNuxtApp().$awn.success("This User Deleted!!!");
+    location.reload(true);
+  };
+  let onCancel = () => {
+    useNuxtApp().$awn.info("You pressed Cancel");
+  };
+  useNuxtApp().$awn.confirm("Are u sure to delete?", onOk, onCancel, {
+    labels: {
+      confirm: "Dangerous action",
+    },
+  });
+}
 onMounted(() => {
   users.value = res.data.users;
 });

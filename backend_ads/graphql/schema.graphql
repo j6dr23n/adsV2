@@ -51,7 +51,10 @@ type Query {
         @guard
         @field(resolver: "App\\GraphQL\\Queries\\UserTokenResolver")
 
-    infos(limit: Int @limit): [Info!]! @all @orderBy(column: "created_at", direction: DESC) @guard
+    infos(limit: Int @limit): [Info!]!
+        @all
+        @orderBy(column: "created_at", direction: DESC)
+        @guard
 }
 
 type Mutation {
@@ -62,6 +65,7 @@ type Mutation {
         clicks: Int!
         revenue: Int!
         eCPM: Int!
+        created_at: Date!
     ): Ads @create @guard @can(ability: "create", model: "App\\Models\\Ads")
     updateAds(
         id: Int!
@@ -71,7 +75,9 @@ type Mutation {
         clicks: Int!
         revenue: Int!
         eCPM: Int!
+        created_at: Date!
     ): Ads @update @guard @can(ability: "update", model: "App\\Models\\Ads")
+    deleteAds(id: ID!): Ads @delete @guard @can(ability: "delete", model: "App\\Models\\Ads")
     createUser(
         name: String!
         email: String!
@@ -85,6 +91,7 @@ type Mutation {
         password: String @hash
         isAdmin: Int!
     ): User @update @guard @can(ability: "update", model: "App\\Models\\User")
+    deleteUser(id: ID!): User @delete @guard @can(ability: "delete", model: "App\\Models\\User")
     createDomain(user_id: Int!, domain: String!): Domain
         @create
         @guard
@@ -93,6 +100,7 @@ type Mutation {
         @update
         @guard
         @can(ability: "update", model: "App\\Models\\Domain")
+    deleteDomain(id: ID!): Domain @delete @guard @can(ability: "delete", model: "App\\Models\\Domain")
     loginUser(
         email: String!
         password: String!
@@ -111,10 +119,13 @@ type Mutation {
         @guard
         @field(resolver: "App\\GraphQL\\Mutations\\RevokeUserTokensResolver")
 
-    createInfo(text:String!): Info! @create @guard @can(ability: "create", model: "App\\Models\\Info")
+    createInfo(text: String!): Info!
+        @create
+        @guard
+        @can(ability: "create", model: "App\\Models\\Info")
 }
 
-type Info{
+type Info {
     id: ID!
     text: String!
     created_at: DateTime!
